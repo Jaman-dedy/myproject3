@@ -8,6 +8,7 @@ services:
 before_script:
   - psql -c 'create database questioner;' -U postgres
   - psql -c "CREATE USER jaman WITH PASSWORD '123';" -U postgres
+  - npm run createDb
  
 after_success:
   - npm run coveralls
