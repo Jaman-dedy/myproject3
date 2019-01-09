@@ -4,8 +4,18 @@ node_js:
 
 services:
   - postgresql
-
+addons:
+  postgresql: "11"
+  apt:
+    packages:
+      - postgresql-11
+      - postgresql-client-11
+env:
+  global:
+    - PGPORT=5432
+    - DB_NAME=questioner
+    - DB_USER=jaman
 before_script:
-  - psql -c 'create database questioner;' -U jaman
-
+  - psql --command="CREATE USER ${DB_USER};"
+  - psql --command="CREATE DATABASE ${DB_NAME} WITH OWNER = ${DB_USER};"
 
