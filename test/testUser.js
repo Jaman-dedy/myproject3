@@ -24,26 +24,7 @@ describe('Testing user endpoints', () => {
         .expect(200, done);
     });
   });
-
-  describe('Specific user not found', () => {
-    const error = {
-      status: 404,
-      error: 'user with the given Id not exists'
-    };
-    it('Given user Id not found', (done) => {
-      request(app)
-        .get('/users/3000')
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(404)
-        .expect(error)
-        .end((err) => {
-          if (err) return done(err);
-          done();
-        });
-    });
-  });
-
+  
   describe('Post user', () => {
     const user = {
       id: 1,

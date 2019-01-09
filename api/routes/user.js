@@ -1,27 +1,15 @@
 const express = require('express');
-const pg = require('pg');
+const pool = require('./connection');
 
 const router = express.Router();
 
-const config = {
-  user: 'jaman',
-  database: 'questioner',
-  password: '123',
-  port: 5432
-};
-const pool = new pg.Pool(config);
 
 router.get('/', (req, res, next) => {
   pool.connect((err, client, done) => {
-   
     client.query('SELECT * FROM users', (err, result) => {
       done();
       if (err) {
-        console.log(err);
-        res.status(400).json({
-          status: 400,
-          error: err
-        });
+        throw err;
       }
       res.status(200).json({
         status: 200,
@@ -37,10 +25,7 @@ router.get('/:userId', (req, res, next) => {
     client.query('SELECT * FROM users WHERE id_user = $1', [userId], (err, result) => {
       done();
       if (err) {
-        res.status(404).json({
-          status: 404,
-          error: 'user with the given Id not exists'
-        });
+        throw err;
       }
       res.status(200).json({
         status: 200,
@@ -57,10 +42,7 @@ router.post('/', (req, res, next) => {
 
   pool.query('INSERT INTO users (firstname, lastname, othername, email, phonenumber, username, registered, isadmin) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)', [firstname, lastname, othername, email, phonenumber, username, registered, isadmin], (err, results) => {
     if (err) {
-      res.status(400).json({
-        status: 400,
-        error: err
-      });
+      throw err;
     } else {
       res.status(201).json({
         status: 201,
@@ -80,10 +62,7 @@ router.patch('/:userId', (req, res, next) => {
     [firstname, lastname, othername, userId],
     (err, results) => {
       if (err) {
-        res.send(404).json({
-          statuts: 404,
-          error: err
-        });
+        throw err;
       }
       res.status(200).json({
         status: 200,
@@ -97,15 +76,12 @@ router.delete('/:userId', (req, res, next) => {
 
   pool.query('DELETE FROM users WHERE id_user = $1', [userId], (err, results) => {
     if (err) {
-      res.send(400).json({
-        status: 400,
-        error: err
-      });
+      throw err;
     }
 
     res.status(200).json({
-      status : 200,
-      data : `User deleted with ID: ${userId}`
+      status: 200,
+      data: `User deleted with ID: ${userId}`
     });
   });
 });

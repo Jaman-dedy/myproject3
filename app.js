@@ -5,9 +5,6 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-// here the connection string
-
-
 
 const userRoutes = require('./api/routes/user');
 // const rsvpRoutes = require('./api/routes/rsvp');
