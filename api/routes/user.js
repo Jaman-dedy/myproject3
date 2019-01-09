@@ -1,5 +1,15 @@
 const express = require('express');
-const pool = require('./connection');
+// const pool = require('./connection');
+
+const pg = require('pg');
+
+const config = {
+  user: 'jaman',
+  database: 'questioner',
+  password: '123',
+  port: 5432
+};
+const pool = new pg.Pool(config);
 
 const router = express.Router();
 
