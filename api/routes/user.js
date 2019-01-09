@@ -61,14 +61,18 @@ router.post('/', (req, res, next) => {
     firstname, lastname, othername, email, phonenumber, username, registered, isadmin
   } = req.body;
 
-  pool.query('INSERT INTO users (firstname, lastname, othername, email, phonenumber, username, registered, isadmin) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)', [firstname, lastname, othername, email, phonenumber, username, registered, isadmin], (error, results) => {
-    if (error) {
-    throw error;
+  pool.query('INSERT INTO users (firstname, lastname, othername, email, phonenumber, username, registered, isadmin) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)', [firstname, lastname, othername, email, phonenumber, username, registered, isadmin], (err, results) => {
+    if (err) {
+      res.status(400).json({
+        status: 400,
+        error: err
+      });
+    } else {
+      res.status(201).json({
+        status: 201,
+        data: [req.body]
+      });
     }
-    else {
-       res.status(201).send('User added');
-    }
-   
   });
 });
 
