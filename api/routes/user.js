@@ -13,9 +13,7 @@ const pool = new pg.Pool(config);
 
 router.get('/', (req, res, next) => {
   pool.connect((err, client, done) => {
-    if (err) {
-      console.log(`Can not connect to the DB${err}`);
-    }
+   
     client.query('SELECT * FROM users', (err, result) => {
       done();
       if (err) {
@@ -36,9 +34,6 @@ router.get('/', (req, res, next) => {
 router.get('/:userId', (req, res, next) => {
   const userId = parseInt(req.params.userId, 10);
   pool.connect((err, client, done) => {
-    if (err) {
-      console.log(`Can not connect to the DB${err}`);
-    }
     client.query('SELECT * FROM users WHERE id_user = $1', [userId], (err, result) => {
       done();
       if (err) {
@@ -84,22 +79,35 @@ router.patch('/:userId', (req, res, next) => {
   pool.query(
     'UPDATE users SET firstname = $1, lastname = $2, othername = $3 WHERE id_user = $4',
     [firstname, lastname, othername, userId],
-    (error, results) => {
-      if (error) {
-        throw error;
+    (err, results) => {
+      if (err) {
+        res.send(404).json({
+          statuts: 404,
+          error: err
+        });
       }
-      res.status(200).send(`User modified with ID: ${userId}`);
+      res.status(200).json({
+        status: 200,
+        data: [req.body]
+      });
     }
   );
 });
 router.delete('/:userId', (req, res, next) => {
   const userId = parseInt(req.params.userId, 10);
 
-  pool.query('DELETE FROM users WHERE id_user = $1', [userId], (error, results) => {
-    if (error) {
-      throw error;
+  pool.query('DELETE FROM users WHERE id_user = $1', [userId], (err, results) => {
+    if (err) {
+      res.send(400).json({
+        status: 400,
+        error: err
+      });
     }
-    res.status(200).send(`User deleted with ID: ${userId}`);
+
+    res.status(200).json({
+      status : 200,
+      data : `User deleted with ID: ${userId}`
+    });
   });
 });
 module.exports = router;
