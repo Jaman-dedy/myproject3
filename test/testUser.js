@@ -32,7 +32,7 @@ describe('Testing user endpoints', () => {
     };
     it('Given user Id not found', (done) => {
       request(app)
-        .get('/users/30')
+        .get('/users/3000')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(404)
@@ -49,7 +49,11 @@ describe('Testing user endpoints', () => {
       id: 1,
       firstname: 'Emmanuel',
       lastname: 'Bush',
+      othername: 'King',
       email: 'emabush@gmail.com',
+      phonenumber: '+250789813478',
+      username: 'EmaBush',
+      registered: '2018-02-16',
       isAdmin: true
     };
     it('Create a user', (done) => {

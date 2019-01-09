@@ -37,10 +37,9 @@ router.get('/:userId', (req, res, next) => {
     client.query('SELECT * FROM users WHERE id_user = $1', [userId], (err, result) => {
       done();
       if (err) {
-        console.log(err);
-        res.status(400).json({
-          status: 400,
-          error: err
+        res.status(404).json({
+          status: 404,
+          error: 'user with the given Id not exists'
         });
       }
       res.status(200).json({
