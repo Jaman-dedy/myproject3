@@ -1,46 +1,31 @@
 const express = require('express');
-// const pool = require('./connection');
+const pool = require('./connection');
 
-const pg = require('pg');
-
-const config = {
-  user: 'jaman',
-  database: 'questioner',
-  password: '123',
-  port: 5432
-};
-const pool = new pg.Pool(config);
 
 const router = express.Router();
 
 
 router.get('/', (req, res, next) => {
-  pool.connect((err, client, done) => {
-    client.query('SELECT * FROM users', (err, result) => {
-      done();
-      if (err) {
-        throw err;
-      }
-      res.status(200).json({
-        status: 200,
-        data: result.rows
-      });
+  pool.query('SELECT * FROM users', (err, result) => {
+    if (err) {
+      throw err;
+    }
+    res.status(200).json({
+      status: 200,
+      data: result.rows
     });
   });
 });
 
 router.get('/:userId', (req, res, next) => {
-  const userId = parseInt(req.params.userId, 10);
-  pool.connect((err, client, done) => {
-    client.query('SELECT * FROM users WHERE id_user = $1', [userId], (err, result) => {
-      done();
-      if (err) {
-        throw err;
-      }
-      res.status(200).json({
-        status: 200,
-        data: result.rows
-      });
+  const userId = parseInt(req.params.userId, 10); 
+  pool.query('SELECT * FROM users WHERE id_user = $1', [userId], (err, result) => {
+    if (err) {
+      throw err;
+    }
+    res.status(200).json({
+      status: 200,
+      data: result.rows
     });
   });
 });

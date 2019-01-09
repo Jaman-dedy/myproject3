@@ -4,6 +4,7 @@
 const assert = require('chai').assert;
 const request = require('supertest');
 const app = require('../app');
+const connection = require('../api/routes/connection');
 
 describe('Testing user endpoints', () => {
   describe('All users', () => {
